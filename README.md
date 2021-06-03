@@ -1,2 +1,2 @@
 # FullStack-HY
-FullStack open kurssi
+FullStack open kurssi 2021
