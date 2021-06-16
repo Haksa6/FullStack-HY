@@ -1,0 +1,6 @@
+title 0.6: Uusi muistiinpano
+
+selain->palvelin: HTTP POST https://sstudies.cs.helsinki.fi /exampleapp/new_note_spa
+palvelin-->selain: Status code 201
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin-->selain: Status code 304, data.json
