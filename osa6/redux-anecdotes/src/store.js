@@ -15,9 +15,9 @@ const reducer = combineReducers({
 
 const store = createStore(
   reducer,
-  composeWithDevTools(), 
-  applyMiddleware(thunk)
+  composeWithDevTools(applyMiddleware(thunk) ),
 )
+
 
 
 

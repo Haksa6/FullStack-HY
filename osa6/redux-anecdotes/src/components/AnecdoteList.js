@@ -20,8 +20,8 @@ const AnecdoteList = () => {
         </div>
         <div>
           has {anecdote.votes}
-          <button onClick={() => {dispatch(addVote(anecdote.id));
-            dispatch(notificationChange(`You voted '${anecdote.content}'`))}}>vote</button>
+          <button onClick={() => {dispatch(addVote(anecdote));
+            dispatch(notificationChange(`You voted '${anecdote.content}'`, 10000))}}>vote</button>
         </div>
       </div>
     )}
