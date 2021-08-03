@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import blogService from '../services/blogs'
 
 const byLikes = (a1, a2) => a2.likes - a1.likes
@@ -7,15 +8,25 @@ const reducer = (state = [], action) => {
   case 'INIT':
     return action.data.sort(byLikes)
   case 'LIKE':
-    // eslint-disable-next-line no-case-declarations
-    const liked = action.data
-    return state.map(a => a.id===liked.id ? liked : a).sort(byLikes)
+    const blogToChange = state.find(n => n.id === action.data.id)
+    const changedBlog = {
+      ...blogToChange,
+      likes: blogToChange.likes + 1
+    }
+    return state.map(blog =>
+      blog.id !== action.data.id ? blog : changedBlog)
   case 'CREATE':
     return [...state, action.data]
   case 'DELETE':
-    // eslint-disable-next-line no-case-declarations
-    const deleted = action.data
-    return state.map(a => a.id===deleted.id ? deleted : a).sort(byLikes)
+    return state.filter(n => n.id !== action.data.id)
+  case 'COMMENT':
+    const blogToComment = state.find(n => n.id === action.data.id)
+    const commentedBlog = {
+      ...blogToComment,
+      comments: action.data.comments
+    }
+    return state.map(blog =>
+      blog.id !== action.data.id ? blog : commentedBlog)
   default:
     return state
   }
@@ -23,7 +34,7 @@ const reducer = (state = [], action) => {
 
 export const createBlog = (content) => {
   return async dispatch => {
-    const data = await blogService.createNew(content)
+    const data = await blogService.create(content)
     dispatch({
       type: 'CREATE',
       data
@@ -33,10 +44,10 @@ export const createBlog = (content) => {
 
 export const initializeBlogs = () => {
   return async dispatch => {
-    const blogs = await blogService.getAll()
+    const data = await blogService.getAll()
     dispatch({
       type: 'INIT',
-      data: blogs
+      data
     })
   }
 }
@@ -56,7 +67,17 @@ export const deleteBlog = (id) => {
     await blogService.remove(id)
     dispatch({
       type: 'DELETE',
-      id
+      data: { id }
+    })
+  }
+}
+
+export const addComment = (id, comment) => {
+  return async dispatch => {
+    const data = await blogService.comment(id, comment)
+    dispatch({
+      type: 'COMMENT',
+      data
     })
   }
 }
